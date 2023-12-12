@@ -1,6 +1,8 @@
 function greeting() {
-  return "Hello, world!"
+  return "Hello world!"
 }
+
+exports.greeting = greeting
 
 exports.handler = async (event) => {
   const response = {
@@ -9,5 +11,3 @@ exports.handler = async (event) => {
   }
   return response
 }
-
-exports.greeting = greeting
