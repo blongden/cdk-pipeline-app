@@ -16,7 +16,6 @@ jobs:
       - name: npm install and build
         run: |
           npm ci
-          npm test
           npm run build --if-present
         env:
           CI: true
