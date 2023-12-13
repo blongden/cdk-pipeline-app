@@ -11,7 +11,9 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
   analyse:
+    name: SAST and unit tests
     needs: checkout
+    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
@@ -38,7 +40,8 @@ jobs:
           files: |
             junit.xml
   deploy:
-    name: test and deploy lambda
+    name: Deploy Lambda to AWS
+    runs-on: ubuntu-latest
     needs: analyse
     steps:
       - name: zip
