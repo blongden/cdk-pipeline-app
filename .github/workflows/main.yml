@@ -1,7 +1,7 @@
 name: deploy to lambda
 on: [push]
 jobs:
-  deploy_pipeline:
+  analyze:
     name: test and deploy lambda
     strategy:
       fail-fast: false
