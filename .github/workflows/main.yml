@@ -1,7 +1,7 @@
 name: deploy to lambda
 on: [push]
 jobs:
-  analyze:
+  deploy-pipeline:
     name: test and deploy lambda
     strategy:
       fail-fast: false
@@ -23,10 +23,13 @@ jobs:
           CI: true
       - name: Publish Test Results
         uses: EnricoMi/publish-unit-test-result-action@v2
-        if: always()
         with:
           files: |
             junit.xml
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v2
+        with:
+          languages: ${{ matrix.language }}
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v2
         with:
