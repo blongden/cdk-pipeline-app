@@ -2,7 +2,7 @@ name: deploy to lambda
 on: [push]
 jobs:
   build_test_deploy:
-    name: SAST and unit tests
+    name: SAST, unit tests and deploy
     runs-on: ubuntu-latest
     strategy:
       matrix:
