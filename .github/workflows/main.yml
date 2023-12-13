@@ -1,12 +1,18 @@
 name: deploy to lambda
 on: [push]
 jobs:
-  deploy_source:
-    name: build and deploy lambda
+  deploy_pipeline:
+    name: test and deploy lambda
     strategy:
+      fail-fast: false
       matrix:
         node-version: [20.x]
+        language: [ 'javascript-typescript' ]
     runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
     steps:
       - uses: actions/checkout@v4
       - name: Use Node.js ${{ matrix.node-version }}
@@ -19,6 +25,16 @@ jobs:
           npm run build --if-present
         env:
           CI: true
+      - name: Publish Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        if: always()
+        with:
+          files: |
+            junit.xml
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v2
+        with:
+          category: "/language:${{matrix.language}}"
       - name: zip
         uses: montudor/action-zip@v0.1.0
         with:
@@ -31,9 +47,4 @@ jobs:
           aws_region: eu-west-2
           function_name: my-function
           zip_file: bundle.zip
-      - name: Publish Test Results
-        uses: EnricoMi/publish-unit-test-result-action@v2
-        if: always()
-        with:
-          files: |
-            junit.xml
+
